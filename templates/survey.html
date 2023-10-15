@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Meta tags for character set, compatibility, and viewport settings -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Linking Bootstrap CSS from a CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <title>Survey Questions</title>
+    <style>
+      .text-center {
+        padding-left: 275px; /* Add padding to the left side */
+        padding-right: 275px; /* Add padding to the right side */
+      }
+      .instructions {
+        padding: 10px 0; /* Add padding to the top and bottom of the instructions */
+      }
+    </style>
+  </head>
+
+
+  <body>
+    <div class="container-lg">
+      <div class="text-center">
+        <h1>QChat10</h1>
+        <h3>Instructions: Please answer questions below for your toddler.</h3>
+        <p class="lead">
+            The questions below are from the QChat10 survey (Quantitative Checklist for Autism in Toddlers), which can be used to identify toddlers that may benefit from a referral for an autism assessment.
+        </p>
+        <p class="lead">
+            The results shown on the next page are not a diagnosis and not not mean your child has or does not have Autism Spectrum Disorder.
+        </p>
+        <p class="lead">
+            If you are concerned about your child's development or behavior, please discuss the results of your survey with your pediatrician.
+        </p>
+      </div>
+      <div class="row justify-content-center my-5">
+        <div class="col-lg-6">
+            <form method="POST" action="/survey">
+                {% for question in surveyQuestions %}
+                <div class="question">
+                    <p>{{ question }}</p>
+                    <select name="option_{{ loop.index }}">
+                        {% if loop.index == 1 or loop.index == 7 %}
+                        {% for option in AlwaysOptionList %}
+                        <option value="{{ option[0] }}">{{ option[1] }}</option>
+                        {% endfor %}
+                        {% elif loop.index == 2 %}
+                        {% for option in EasyOptionList %}
+                        <option value="{{ option[0] }}">{{ option[1] }}</option>
+                        {% endfor %}
+                        {% elif loop.index in [3, 4, 5, 6, 9, 10] %}
+                        {% for option in TimesOptionList %}
+                        <option value="{{ option[0] }}">{{ option[1] }}</option>
+                        {% endfor %}
+                        {% elif loop.index == 8 %}
+                        {% for option in TypicalOptionList %}
+                        <option value="{{ option[0] }}">{{ option[1] }}</option>
+                        {% endfor %}
+                        {% elif loop.index == 11 %}
+                        {% for age in range(12, 37) %}
+                        <option value="{{ age }}">{{ age }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                {% endfor %}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
